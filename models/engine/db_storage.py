@@ -30,11 +30,12 @@ class DBStorage:
         HBNB_MYSQL_PWD = os.getenv('HBNB_MYSQL_PWD')
         HBNB_MYSQL_HOST = os.getenv('HBNB_MYSQL_HOST')
         HBNB_MYSQL_DB = os.getenv('HBNB_MYSQL_DB')
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'
-                           .format(HBNB_MYSQL_USER,
-                                   HBNB_MYSQL_PWD,
-                                   HBNB_MYSQL_HOST,
-                                   HBNB_MYSQL_DB), pool_pre_ping=True)
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'.
+                                      format(HBNB_MYSQL_USER,
+                                             HBNB_MYSQL_PWD,
+                                             HBNB_MYSQL_HOST,
+                                             HBNB_MYSQL_DB),
+                                      pool_pre_ping=True)
 
         if os.getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(bind=self.__engine)
@@ -61,9 +62,9 @@ class DBStorage:
         """add the object to the current database
         """
         self.__session.add(obj)
-    
+
     def save(self):
-        """commit all changes of the current database 
+        """commit all changes of the current database
         """
         self.__session.commit()
 
@@ -77,7 +78,7 @@ class DBStorage:
         """deserialize the JSON file path
         """
         Base.metadata.create_all(bind=self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
-        
