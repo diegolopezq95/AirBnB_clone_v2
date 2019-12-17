@@ -23,6 +23,7 @@ class DBStorage:
     """
     __engine = None
     __session = None
+    obj_list = {State, City}
 
     def __init__(self):
         HBNB_MYSQL_USER = os.getenv('HBNB_MYSQL_USER')
@@ -43,15 +44,18 @@ class DBStorage:
         Return:
             returns a dictionary (like FileStorage)
         """
-        if cls:
-            my_list = self.__session.query(cls).all()
+        my_dict = {}
+        if cls is None:
+            for obj_value in self.obj_list:
+                my_list = self.__session.query(obj_value).all()
+                for obj in my_list:
+                    my_dict.update({"{}.{}".format(type(obj).__name__,
+                                                   obj.id): obj})
         else:
-            my_list = self.__session.query(User, State, City, Amenity, Place, Review).all()
-        new_dict = {}
-        for obj in my_list:
-            key = "{}.{}".format(obj.__class__.__name__, obj.id)
-            new_dict[key] = obj
-        return new_dict
+            my_list = self.__session.query(eval(cls)).all()
+            for obj in my_list:
+                my_dict.update({"{}.{}".format(cls, obj.id): obj})
+        return my_dict
 
     def new(self, obj):
         """add the object to the current database
