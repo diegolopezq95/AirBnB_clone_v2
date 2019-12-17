@@ -11,6 +11,7 @@ class Amenity(BaseModel, Base):
     Attributes:
         name: input name
     """
-    __tablename__= "amenities"
+    __tablename__ = "amenities"
     name = Column(String(128), nullable=False)
-    place_amenities = relationship("Place", secondary=place_amenity, back_populates="amenities")
+    place_amenities = relationship("Place", secondary=place_amenity,
+                                   back_populates="amenities")
