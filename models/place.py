@@ -62,4 +62,17 @@ class Place(BaseModel, Base):
         def amenities(self):
             """returns the list of Amenity instances
             """
-            return self.amenities_ids
+            my_list = []
+            for key_obj, value in models.storage.all(Amenity).items():
+                for amenit in self.amenity_ids: 
+                    if amenit == value.id:
+                        my_list.append(value)
+            return my_list
+                    
+
+        @amenities.setter
+        def amenities(self, obj):
+            """Setter attribute amenities
+            """
+            if obj.__class__.__name__ == 'Amenity':
+                self.amenity_ids.append(obj.id)
