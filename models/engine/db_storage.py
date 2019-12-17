@@ -23,7 +23,7 @@ class DBStorage:
     """
     __engine = None
     __session = None
-    obj_list = {State, City, User, Place, Review}
+    obj_list = {State, City, User, Place, Review, Amenity}
 
     def __init__(self):
         HBNB_MYSQL_USER = os.getenv('HBNB_MYSQL_USER')
