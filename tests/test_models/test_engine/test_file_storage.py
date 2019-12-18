@@ -14,6 +14,7 @@ from models.review import Review
 from models.engine.file_storage import FileStorage
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "DBStorage Mode")
 class TestFileStorage(unittest.TestCase):
     '''this will test the FileStorage'''
 
@@ -25,11 +26,13 @@ class TestFileStorage(unittest.TestCase):
         cls.user.last_name = "Yo"
         cls.user.email = "1234@yahoo.com"
         cls.storage = FileStorage()
+        cls.state = State(name="Cundinamarca")
 
     @classmethod
     def teardown(cls):
         """at the end of the test this will tear it down"""
         del cls.user
+        del cls.state
 
     def tearDown(self):
         """teardown"""
@@ -51,6 +54,31 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNotNone(obj)
         self.assertEqual(type(obj), dict)
         self.assertIs(obj, storage._FileStorage__objects)
+
+    def test_all_cls(self):
+        """tests if all works in File Storage"""
+        storage = FileStorage()
+        new_city = City(name="Bogota")
+        city_id = new_city.id
+        storage.new(new_city)
+        storage.save()
+        obj_city = storage.all(City)
+        self.assertIsNotNone(obj_city)
+        self.assertEqual(type(obj_city), dict)
+        self.assertEqual(len(obj_city), 2)
+        city = obj_city["City." + city_id]
+        self.assertEqual(city.id, city_id)
+
+    def test_delete(self):
+        """tests if all works in File Storage"""
+        storage = FileStorage()
+        state_instance = State(name="California")
+        self.assertIsNotNone(state_instance)
+        storage.new(state_instance)
+        storage.save()
+        storage.delete(state_instance)
+        obj_state = storage.all(State)
+        self.assertEqual(len(obj_state), 0)
 
     def test_new(self):
         """test when new is created"""

@@ -83,11 +83,31 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
         with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("create User")
+            self.consol.onecmd("create User email=\"email\" password=\"asdfs\"")
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("all User")
             self.assertEqual(
                 "[[User]", f.getvalue()[:7])
+
+    def test_create_argum(self):
+        """test when no command create"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("create State name=\"Cundinamarca\"")
+            id_state = f.getvalue()
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            with patch('sys.stdout', new=StringIO()) as f:
+                self.consol.onecmd("create Place city_id=\"0001\" "
+                                   "user_id=\"dibois\" "
+                                   "name=\"My_little_house\" number_rooms=4 "
+                                   "number_bathrooms=2 max_guest=10 "
+                                   "price_by_night=300 latitude=37.773972 "
+                                   "longitude=-122.431297")
+                self.assertRegex(f.getvalue(), '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5]'
+                                 '[0-9a-f]{3}-[89ab][0-9a-f]{3}-'
+                                 '[0-9a-f]{12}$')
+                with patch('sys.stdout', new=StringIO()) as f:
+                    self.consol.onecmd("all Place")
+                    self.assertEqual("[[Place] ", f.getvalue()[:9])
 
     def test_show(self):
         """Test show command inpout"""
@@ -154,18 +174,19 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("update User 12345")
             self.assertEqual(
                 "** no instance found **\n", f.getvalue())
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("all User")
-            obj = f.getvalue()
-        my_id = obj[obj.find('(')+1:obj.find(')')]
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("update User " + my_id)
-            self.assertEqual(
-                "** attribute name missing **\n", f.getvalue())
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("update User " + my_id + " Name")
-            self.assertEqual(
-                "** value missing **\n", f.getvalue())
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            with patch('sys.stdout', new=StringIO()) as f:
+                self.consol.onecmd("all User")
+                obj = f.getvalue()
+                my_id = obj[obj.find('(')+1:obj.find(')')]
+            with patch('sys.stdout', new=StringIO()) as f:
+                self.consol.onecmd("update User " + my_id)
+                self.assertEqual(
+                    "** attribute name missing **\n", f.getvalue())
+            with patch('sys.stdout', new=StringIO()) as f:
+                self.consol.onecmd("update User " + my_id + " Name")
+                self.assertEqual(
+                    "** value missing **\n", f.getvalue())
 
     def test_z_all(self):
         """Test alternate all command inpout"""
@@ -174,7 +195,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
         with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("State.all()")
+            self.consol.onecmd("BaseModel.all()")
             self.assertEqual("[]\n", f.getvalue())
 
     def test_z_count(self):
@@ -184,7 +205,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
         with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("State.count()")
+            self.consol.onecmd("City.count()")
             self.assertEqual("0\n", f.getvalue())
 
     def test_z_show(self):
