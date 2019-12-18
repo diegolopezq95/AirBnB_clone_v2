@@ -64,11 +64,10 @@ class Place(BaseModel, Base):
             """
             my_list = []
             for key_obj, value in models.storage.all(Amenity).items():
-                for amenit in self.amenity_ids: 
+                for amenit in self.amenity_ids:
                     if amenit == value.id:
                         my_list.append(value)
             return my_list
-                    
 
         @amenities.setter
         def amenities(self, obj):
