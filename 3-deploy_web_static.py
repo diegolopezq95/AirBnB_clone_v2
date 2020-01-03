@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-""" Fabric script that creates and distributes an
-archive to your web servers, using the function deploy()
+""" Fabric script that distributes an archive to the
+web servers, using the function do_deploy()
 """
 
 
@@ -11,6 +11,17 @@ import os
 
 env.hosts = ['104.196.35.117', '35.185.92.133']
 env.user = "ubuntu"
+
+
+def deploy():
+    """
+    creates and distributes an archive to web servers
+    """
+    new_path = do_pack()
+    print(new_path)
+    if not new_path:
+        return False
+    return do_deploy(new_path)
 
 
 def do_pack():
@@ -24,7 +35,7 @@ def do_pack():
         tar_file = "tar -cvzf versions/web_static_{}.tgz ./web_static"\
             .format(date_)
         local(tar_file)
-        return ("/versions/web_static_{}.tgz".format(date_))
+        return ("./versions/web_static_{}.tgz".format(date_))
     except:
         return None
 
@@ -37,8 +48,10 @@ def do_deploy(archive_path):
         return False
     try:
         put(archive_path, "/tmp/")
-        filename_tgz = archive_path.split("/")[1]
+        filename_tgz = archive_path.split("/")[2]
         filename = filename_tgz[:-4]
+        print(filename_tgz)
+        print(filename)
         run("mkdir -p /data/web_static/releases/{}".format(filename))
         run("tar -xzf /tmp/{} -C /data/web_static/releases/{}"
             .format(filename_tgz, filename))
@@ -52,13 +65,3 @@ def do_deploy(archive_path):
         return True
     except:
         return False
-
-
-def deploy():
-    """
-    creates and distributes an archive to web servers
-    """
-    new_path = do_pack()
-    if not new_path:
-        return False
-    return do_deploy(new_path)
