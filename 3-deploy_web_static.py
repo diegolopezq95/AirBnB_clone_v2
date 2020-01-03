@@ -13,17 +13,6 @@ env.hosts = ['104.196.35.117', '35.185.92.133']
 env.user = "ubuntu"
 
 
-def deploy():
-    """
-    creates and distributes an archive to web servers
-    """
-    new_path = do_pack()
-    print(new_path)
-    if not new_path:
-        return False
-    return do_deploy(new_path)
-
-
 def do_pack():
     """
     function that generates a .tgz archive
@@ -65,3 +54,13 @@ def do_deploy(archive_path):
         return True
     except:
         return False
+
+def deploy():
+    """
+    creates and distributes an archive to web servers
+    """
+    new_path = do_pack()
+    print(new_path)
+    if not new_path:
+        return False
+    return do_deploy(new_path)
