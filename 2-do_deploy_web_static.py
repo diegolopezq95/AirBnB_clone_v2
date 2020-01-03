@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Fabric script that distributes an archive to the
-web servers, using the function do_deploy
+web servers, using the function do_deploy()
 """
 
 
