@@ -17,6 +17,7 @@ def state_amenity_list():
                            .all('State'),
                            amenity_dict=storage.all('Amenity'))
 
+
 @app.teardown_appcontext
 def teardown(tmp):
     storage.close()
