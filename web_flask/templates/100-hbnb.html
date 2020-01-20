@@ -62,7 +62,7 @@
 	  <div class="user">
 	    {% set key = "User." + place.user_id %}
 	    {% if key in user_dict %}
-            <b>Owner:</b> {{ user_dict.[key].first_name }} {{ user_dict.[key].last_name }}
+            <b>Owner:</b> {{ user_dict[key].first_name }} {{ user_dict[key].last_name }}
 	    {% endif %}
           </div>
           <div class="description">
