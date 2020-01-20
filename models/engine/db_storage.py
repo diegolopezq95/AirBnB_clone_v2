@@ -12,7 +12,7 @@ from models.review import Review
 from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
-
+from sqlalchemy.orm.session import Session
 
 class DBStorage:
     """This class serializes instances to a JSON file and
@@ -82,3 +82,8 @@ class DBStorage:
                                        expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        """closes the session
+        """
+        Session.close(self.__session)
