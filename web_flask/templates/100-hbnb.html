@@ -48,7 +48,7 @@
       </section>
       <section class="places">
 	<h1>Places</h1>
-	{% for place in places.values()|sort(attribute='name') %}
+	{% for place in place_dict.values()|sort(attribute='name') %}
 	<article>
 	  <div class="title_box">
 	    <h2>{{ place.name }}</h2>
