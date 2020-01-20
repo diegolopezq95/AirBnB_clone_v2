@@ -14,8 +14,8 @@ app = Flask(__name__)
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def state_list(id=None):
-    return render_template("9-states.html", my_dict=storage
-                           .all("State"), id=id)
+    return render_template("9-states.html",
+                           my_dict=storage.all("State"), id=id)
 
 
 @app.teardown_appcontext

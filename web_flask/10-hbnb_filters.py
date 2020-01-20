@@ -13,8 +13,8 @@ app = Flask(__name__)
 
 @app.route('/hbnb_filters', strict_slashes=False)
 def state_amenity_list():
-    return render_template("10-hbnb_filters.html", state_dict=storage
-                           .all('State'),
+    return render_template("10-hbnb_filters.html",
+                           state_dict=storage.all('State'),
                            amenity_dict=storage.all('Amenity'))
 
 
