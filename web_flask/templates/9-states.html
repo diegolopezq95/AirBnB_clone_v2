@@ -14,7 +14,7 @@
     {% else %}
     {% set key = "State." + id|string %}
     {% if key in my_dict %}
-    <H1>States: {{ my_dict[key].name }}</H1>
+    <H1>State: {{ my_dict[key].name }}</H1>
     <H3>Cities:</H3>
     <UL>
       {% for city in my_dict[key].cities|sort(attribute='name') %}
