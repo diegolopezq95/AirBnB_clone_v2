@@ -19,7 +19,7 @@ def state_amenity_list():
 
 
 @app.teardown_appcontext
-def teardown(tmp):
+def teardown(exception):
     storage.close()
 
 if __name__ == "__main__":
