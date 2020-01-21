@@ -14,6 +14,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm.session import Session
 
+
 class DBStorage:
     """This class serializes instances to a JSON file and
     deserializes JSON file to instances
