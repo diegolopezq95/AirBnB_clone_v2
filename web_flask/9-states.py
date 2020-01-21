@@ -15,11 +15,11 @@ app = Flask(__name__)
 @app.route('/states/<id>', strict_slashes=False)
 def state_list(id=None):
     return render_template("9-states.html",
-                           my_dict=storage.all("State"), id=id)
+                           my_dict=storage.all('State'), id=id)
 
 
 @app.teardown_appcontext
-def teardown(tmp):
+def teardown(exception):
     storage.close()
 
 if __name__ == "__main__":
