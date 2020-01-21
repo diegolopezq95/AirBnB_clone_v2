@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 
 @app.route('/hbnb', strict_slashes=False)
-def state_amenity_list():
+def all_list():
     return render_template("100-hbnb.html",
                            state_dict=storage.all('State'),
                            amenity_dict=storage.all('Amenity'),
@@ -21,7 +21,7 @@ def state_amenity_list():
 
 
 @app.teardown_appcontext
-def teardown(tmp):
+def teardown(exception):
     storage.close()
 
 if __name__ == "__main__":
